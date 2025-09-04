@@ -2,6 +2,8 @@ import { Mail, ThumbsUp, ThumbsDown, Minus, AlertTriangle, Clock } from 'lucide-
 import { AnalyticsCard } from './AnalyticsCard';
 import { SentimentChart } from './SentimentChart';
 import { EmailsTrendChart } from './EmailsTrendChart';
+import { PriorityPieChart } from './PriorityPieChart';
+import { ResolutionChart } from './ResolutionChart';
 import { AnalyticsData } from '@/types/email';
 
 interface AnalyticsSectionProps {
@@ -58,7 +60,13 @@ export function AnalyticsSection({ data }: AnalyticsSectionProps) {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <SentimentChart data={data.sentimentDistribution} />
+        <PriorityPieChart urgentEmails={data.urgentEmails} totalEmails={data.totalEmails} />
+      </div>
+
+      {/* Additional Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <EmailsTrendChart data={data.last24Hours} />
+        <ResolutionChart />
       </div>
     </div>
   );

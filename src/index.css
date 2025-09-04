@@ -81,6 +81,13 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Chart colors for better visualization */
+    --chart-1: 45 96% 61%;  /* Primary yellow for positive data */
+    --chart-2: 18 100% 61%; /* Urgent orange for negative/pending data */
+    --chart-3: 28 87% 60%;  /* Secondary orange */
+    --chart-4: 38 100% 61%; /* Accent orange-yellow */
+    --chart-5: 8 92% 58%;   /* Hover deep orange */
   }
 
   .dark {
@@ -131,6 +138,13 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Chart colors for dark mode */
+    --chart-1: 45 90% 65%;  /* Primary yellow (darker) */
+    --chart-2: 18 85% 55%;  /* Urgent orange (darker) */
+    --chart-3: 28 70% 45%;  /* Secondary orange (darker) */
+    --chart-4: 38 85% 55%;  /* Accent orange-yellow (darker) */
+    --chart-5: 8 80% 50%;   /* Hover deep orange (darker) */
   }
 }
 
