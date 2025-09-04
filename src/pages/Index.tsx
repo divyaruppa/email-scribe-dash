@@ -1,12 +1,106 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useMemo } from 'react';
+import { Header } from '@/components/layout/Header';
+import { Sidebar } from '@/components/layout/Sidebar';
+import { AnalyticsSection } from '@/components/analytics/AnalyticsSection';
+import { SearchAndSort } from '@/components/emails/SearchAndSort';
+import { EmailList } from '@/components/emails/EmailList';
+import { EmailDetailsPanel } from '@/components/emails/EmailDetailsPanel';
+import { mockEmails, mockAnalytics } from '@/data/mockData';
+import { Email, FilterType } from '@/types/email';
 
 const Index = () => {
+  const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
+  const [sentimentFilter, setSentimentFilter] = useState<FilterType>('all');
+  const [priorityFilter, setPriorityFilter] = useState<FilterType>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Filter emails based on current filters and search query
+  const filteredEmails = useMemo(() => {
+    return mockEmails.filter((email) => {
+      // Sentiment filter
+      if (sentimentFilter !== 'all' && email.sentiment !== sentimentFilter) {
+        return false;
+      }
+
+      // Priority filter
+      if (priorityFilter !== 'all' && email.priority !== priorityFilter) {
+        return false;
+      }
+
+      // Search query
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        return (
+          email.sender.toLowerCase().includes(query) ||
+          email.subject.toLowerCase().includes(query) ||
+          email.body.toLowerCase().includes(query)
+        );
+      }
+
+      return true;
+    });
+  }, [sentimentFilter, priorityFilter, searchQuery]);
+
+  const handleEmailClick = (email: Email) => {
+    setSelectedEmail(email);
+  };
+
+  const handleCloseEmailDetails = () => {
+    setSelectedEmail(null);
+  };
+
+  const handleSortClick = () => {
+    // TODO: Implement sort functionality
+    console.log('Sort clicked');
+  };
+
+  const handleFilterClick = () => {
+    // TODO: Implement additional filter functionality
+    console.log('Filter clicked');
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-gradient-warm">
+      <Header />
+      
+      <div className="flex">
+        <Sidebar
+          sentimentFilter={sentimentFilter}
+          priorityFilter={priorityFilter}
+          onSentimentFilterChange={setSentimentFilter}
+          onPriorityFilterChange={setPriorityFilter}
+        />
+        
+        <main className="flex-1 ml-72 mt-20 p-6 min-h-screen">
+          <div className="max-w-7xl mx-auto space-y-8">
+            {/* Analytics Section */}
+            <AnalyticsSection data={mockAnalytics} />
+            
+            {/* Search and Sort Section */}
+            <SearchAndSort
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              onSortClick={handleSortClick}
+              onFilterClick={handleFilterClick}
+            />
+            
+            {/* Email List */}
+            <EmailList
+              emails={filteredEmails}
+              onEmailClick={handleEmailClick}
+            />
+          </div>
+        </main>
       </div>
+
+      {/* Email Details Panel */}
+      {selectedEmail && (
+        <EmailDetailsPanel
+          email={selectedEmail}
+          isOpen={!!selectedEmail}
+          onClose={handleCloseEmailDetails}
+        />
+      )}
     </div>
   );
 };

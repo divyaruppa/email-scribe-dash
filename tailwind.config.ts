@@ -52,6 +52,14 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				urgent: {
+					DEFAULT: 'hsl(var(--urgent))',
+					foreground: 'hsl(var(--urgent-foreground))'
+				},
+				hover: {
+					DEFAULT: 'hsl(var(--hover))',
+					foreground: 'hsl(var(--hover-foreground))'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -67,6 +75,19 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			backgroundImage: {
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-urgent': 'var(--gradient-urgent)',
+				'gradient-warm': 'var(--gradient-warm)',
+			},
+			boxShadow: {
+				'warm': 'var(--shadow-warm)',
+				'card': 'var(--shadow-card)',
+				'hover': 'var(--shadow-hover)',
+			},
+			transitionProperty: {
+				'smooth': 'var(--transition-smooth)',
 			},
 			keyframes: {
 				'accordion-down': {
