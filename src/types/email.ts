@@ -1,4 +1,4 @@
-export type Priority = 'urgent' | 'normal';
+export type Priority = 'urgent' | 'not urgent';
 export type Sentiment = 'positive' | 'negative' | 'neutral';
 
 export interface Email {

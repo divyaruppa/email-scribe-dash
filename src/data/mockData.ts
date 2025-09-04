@@ -23,7 +23,7 @@ export const mockEmails: Email[] = [
     subject: 'Great service experience!',
     body: 'I wanted to thank your team for the excellent customer service. The product arrived on time and exceeded my expectations.',
     dateTime: '2025-09-03 09:30 AM',
-    priority: 'normal',
+    priority: 'not urgent',
     sentiment: 'positive',
     extractedInfo: {
       productOrderId: 'ORD12346',
@@ -37,7 +37,7 @@ export const mockEmails: Email[] = [
     subject: 'Order status inquiry',
     body: 'Could you please provide an update on my recent order? I placed it last week but haven\'t received any tracking information.',
     dateTime: '2025-09-03 08:45 AM',
-    priority: 'normal',
+    priority: 'not urgent',
     sentiment: 'neutral',
     extractedInfo: {
       phone: '+1-555-0123',
@@ -66,7 +66,7 @@ export const mockEmails: Email[] = [
     subject: 'Partnership opportunity',
     body: 'I\'m reaching out to discuss a potential partnership between our companies. Would you be available for a call this week?',
     dateTime: '2025-09-03 07:15 AM',
-    priority: 'normal',
+    priority: 'not urgent',
     sentiment: 'positive',
     extractedInfo: {
       phone: '+1-555-0987',
@@ -81,7 +81,7 @@ export const mockEmails: Email[] = [
     subject: 'Product feedback',
     body: 'The product is okay but could use some improvements in the user interface. Overall satisfied with the purchase.',
     dateTime: '2025-09-02 04:30 PM',
-    priority: 'normal',
+    priority: 'not urgent',
     sentiment: 'neutral',
     extractedInfo: {
       productOrderId: 'ORD12348',

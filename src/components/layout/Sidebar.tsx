@@ -24,7 +24,7 @@ export function Sidebar({
   const priorityOptions: { value: FilterType; label: string }[] = [
     { value: 'all', label: 'All' },
     { value: 'urgent', label: 'Urgent' },
-    { value: 'normal', label: 'Normal' },
+    { value: 'not urgent', label: 'Not Urgent' },
   ];
 
   return (
@@ -63,15 +63,15 @@ export function Sidebar({
           <h3 className="text-sm font-medium text-foreground mb-3">
             Filter by Priority
           </h3>
-          <div className="flex bg-card rounded-lg p-1 border border-border">
+          <div className="space-y-2">
             {priorityOptions.map((option) => (
               <Button
                 key={option.value}
-                variant="ghost"
+                variant={priorityFilter === option.value ? "default" : "ghost"}
                 size="sm"
-                className={`flex-1 transition-smooth ${
+                className={`w-full justify-start transition-smooth ${
                   priorityFilter === option.value
-                    ? 'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90'
+                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
                     : 'hover:bg-accent hover:text-accent-foreground'
                 }`}
                 onClick={() => onPriorityFilterChange(option.value)}
