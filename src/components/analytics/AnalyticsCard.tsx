@@ -12,15 +12,15 @@ export function AnalyticsCard({ title, value, icon: Icon, variant = 'default' }:
   const getVariantStyles = () => {
     switch (variant) {
       case 'positive':
-        return 'bg-gradient-to-br from-green-50 to-green-100 border-green-200 dark:from-green-900/20 dark:to-green-800/20 dark:border-green-800';
+        return 'bg-gradient-to-br from-green-50 to-green-100 border-green-200 dark:from-green-900/30 dark:to-green-800/30 dark:border-green-700';
       case 'negative':
-        return 'bg-gradient-to-br from-red-50 to-red-100 border-red-200 dark:from-red-900/20 dark:to-red-800/20 dark:border-red-800';
+        return 'bg-gradient-to-br from-red-50 to-red-100 border-red-200 dark:from-red-900/30 dark:to-red-800/30 dark:border-red-700';
       case 'neutral':
-        return 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 dark:from-blue-900/20 dark:to-blue-800/20 dark:border-blue-800';
+        return 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 dark:border-blue-700';
       case 'urgent':
-        return 'bg-gradient-urgent border-urgent/20';
+        return 'bg-gradient-urgent border-urgent/30 shadow-lg';
       default:
-        return 'bg-gradient-primary border-primary/20';
+        return 'bg-gradient-primary border-primary/30 shadow-lg';
     }
   };
 
@@ -40,15 +40,15 @@ export function AnalyticsCard({ title, value, icon: Icon, variant = 'default' }:
   };
 
   return (
-    <Card className={`hover:shadow-hover transition-smooth ${getVariantStyles()}`}>
+    <Card className={`hover:shadow-hover hover:scale-105 transition-smooth transform ${getVariantStyles()}`}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-card-foreground">
+        <CardTitle className="text-sm font-medium text-card-foreground contrast-more:text-foreground">
           {title}
         </CardTitle>
         <Icon className={`h-5 w-5 ${getIconStyles()}`} />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold text-card-foreground">
+        <div className="text-2xl font-bold text-card-foreground contrast-more:text-foreground">
           {value}
         </div>
       </CardContent>

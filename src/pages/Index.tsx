@@ -5,18 +5,30 @@ import { AnalyticsSection } from '@/components/analytics/AnalyticsSection';
 import { SearchAndSort } from '@/components/emails/SearchAndSort';
 import { EmailList } from '@/components/emails/EmailList';
 import { EmailDetailsPanel } from '@/components/emails/EmailDetailsPanel';
+import { CsvUpload } from '@/components/csv/CsvUpload';
 import { mockEmails, mockAnalytics } from '@/data/mockData';
-import { Email, FilterType } from '@/types/email';
+import { Email, FilterType, AnalyticsData } from '@/types/email';
 
 const Index = () => {
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [sentimentFilter, setSentimentFilter] = useState<FilterType>('all');
   const [priorityFilter, setPriorityFilter] = useState<FilterType>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [emails, setEmails] = useState<Email[]>([]);
+  const [analytics, setAnalytics] = useState<AnalyticsData>({
+    totalEmails: 0,
+    positiveEmails: 0,
+    negativeEmails: 0,
+    neutralEmails: 0,
+    urgentEmails: 0,
+    averageResponseTime: '0 hours',
+    sentimentDistribution: { positive: 0, negative: 0, neutral: 0 },
+    last24Hours: [],
+  });
 
   // Filter emails based on current filters and search query
   const filteredEmails = useMemo(() => {
-    return mockEmails.filter((email) => {
+    return emails.filter((email) => {
       // Sentiment filter
       if (sentimentFilter !== 'all' && email.sentiment !== sentimentFilter) {
         return false;
@@ -39,7 +51,12 @@ const Index = () => {
 
       return true;
     });
-  }, [sentimentFilter, priorityFilter, searchQuery]);
+  }, [emails, sentimentFilter, priorityFilter, searchQuery]);
+
+  const handleDataLoaded = (data: { emails: Email[]; analytics: AnalyticsData }) => {
+    setEmails(data.emails);
+    setAnalytics(data.analytics);
+  };
 
   const handleEmailClick = (email: Email) => {
     setSelectedEmail(email);
@@ -73,8 +90,11 @@ const Index = () => {
         
         <main className="flex-1 ml-72 mt-20 p-6 min-h-screen">
           <div className="max-w-7xl mx-auto space-y-8">
+            {/* CSV Upload Section */}
+            <CsvUpload onDataLoaded={handleDataLoaded} />
+            
             {/* Analytics Section */}
-            <AnalyticsSection data={mockAnalytics} />
+            <AnalyticsSection data={analytics} />
             
             {/* Search and Sort Section */}
             <SearchAndSort

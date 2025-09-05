@@ -18,48 +18,48 @@
     --popover: 0 0% 100%;
     --popover-foreground: 25 15% 15%;
 
-    /* Primary: Bright Yellow (#FABC3C) */
-    --primary: 45 96% 61%;
-    --primary-foreground: 25 15% 15%;
+    /* Primary: Modern Blue (#2563EB) */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Warm Orange (#F19143) */
-    --secondary: 28 87% 60%;
+    /* Secondary: Soft Gray (#64748B) */
+    --secondary: 215 20% 65%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Muted: Light warm background */
-    --muted: 45 20% 96%;
-    --muted-foreground: 25 10% 45%;
+    /* Muted: Light neutral background */
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    /* Accent: Orange-Yellow (#FFB238) */
-    --accent: 38 100% 61%;
+    /* Accent: Bright Blue (#3B82F6) */
+    --accent: 221 83% 53%;
     --accent-foreground: 0 0% 100%;
 
-    /* Urgent: Red-Orange (#FF773D) */
-    --urgent: 18 100% 61%;
+    /* Urgent: Alert Red (#EF4444) */
+    --urgent: 0 84% 60%;
     --urgent-foreground: 0 0% 100%;
 
-    /* Hover: Deep Orange (#F55533) */
-    --hover: 8 92% 58%;
+    /* Hover: Deep Blue (#1D4ED8) */
+    --hover: 217 91% 60%;
     --hover-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 45 15% 90%;
-    --input: 45 15% 92%;
-    --ring: 45 96% 61%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
 
     --radius: 0.75rem;
 
     /* Custom gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
-    --gradient-urgent: linear-gradient(135deg, hsl(var(--urgent)), hsl(var(--hover)));
+    --gradient-urgent: linear-gradient(135deg, hsl(var(--urgent)), #dc2626);
     --gradient-warm: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
 
     /* Shadows */
-    --shadow-warm: 0 4px 20px hsl(var(--primary) / 0.1);
-    --shadow-card: 0 2px 10px hsl(25 15% 15% / 0.08);
-    --shadow-hover: 0 8px 30px hsl(var(--primary) / 0.2);
+    --shadow-warm: 0 4px 20px hsl(var(--primary) / 0.15);
+    --shadow-card: 0 2px 10px hsl(220 13% 18% / 0.08);
+    --shadow-hover: 0 8px 30px hsl(var(--primary) / 0.25);
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -83,11 +83,11 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Chart colors for better visualization */
-    --chart-1: 45 96% 61%;  /* Primary yellow for positive data */
-    --chart-2: 18 100% 61%; /* Urgent orange for negative/pending data */
-    --chart-3: 28 87% 60%;  /* Secondary orange */
-    --chart-4: 38 100% 61%; /* Accent orange-yellow */
-    --chart-5: 8 92% 58%;   /* Hover deep orange */
+    --chart-1: 142 76% 36%; /* Green for positive data */
+    --chart-2: 0 84% 60%;   /* Red for negative/urgent data */
+    --chart-3: 217 91% 60%; /* Blue for neutral data */
+    --chart-4: 262 83% 58%; /* Purple for additional data */
+    --chart-5: 32 95% 44%;  /* Orange for pending data */
   }
 
   .dark {
@@ -100,36 +100,36 @@
     --popover: 25 15% 10%;
     --popover-foreground: 45 20% 95%;
 
-    /* Primary: Bright Yellow (darker for dark mode) */
-    --primary: 45 90% 65%;
-    --primary-foreground: 25 15% 8%;
+    /* Primary: Modern Blue (darker for dark mode) */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Warm Orange (darker) */
-    --secondary: 28 70% 45%;
-    --secondary-foreground: 45 20% 95%;
+    /* Secondary: Soft Gray (darker) */
+    --secondary: 215 20% 45%;
+    --secondary-foreground: 0 0% 100%;
 
-    /* Muted: Dark warm background */
-    --muted: 25 15% 15%;
-    --muted-foreground: 45 10% 65%;
+    /* Muted: Dark neutral background */
+    --muted: 215 28% 17%;
+    --muted-foreground: 217 10% 64%;
 
-    /* Accent: Orange-Yellow (darker) */
-    --accent: 38 85% 55%;
-    --accent-foreground: 25 15% 8%;
+    /* Accent: Bright Blue (darker) */
+    --accent: 221 83% 53%;
+    --accent-foreground: 0 0% 100%;
 
-    /* Urgent: Red-Orange (darker) */
-    --urgent: 18 85% 55%;
-    --urgent-foreground: 45 20% 95%;
+    /* Urgent: Alert Red (darker) */
+    --urgent: 0 84% 60%;
+    --urgent-foreground: 0 0% 100%;
 
-    /* Hover: Deep Orange (darker) */
-    --hover: 8 80% 50%;
-    --hover-foreground: 45 20% 95%;
+    /* Hover: Deep Blue (darker) */
+    --hover: 217 91% 60%;
+    --hover-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 25 15% 20%;
-    --input: 25 15% 18%;
-    --ring: 45 90% 65%;
+    --border: 215 28% 25%;
+    --input: 215 28% 23%;
+    --ring: 217 91% 60%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -140,11 +140,11 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Chart colors for dark mode */
-    --chart-1: 45 90% 65%;  /* Primary yellow (darker) */
-    --chart-2: 18 85% 55%;  /* Urgent orange (darker) */
-    --chart-3: 28 70% 45%;  /* Secondary orange (darker) */
-    --chart-4: 38 85% 55%;  /* Accent orange-yellow (darker) */
-    --chart-5: 8 80% 50%;   /* Hover deep orange (darker) */
+    --chart-1: 142 76% 36%; /* Green for positive data */
+    --chart-2: 0 84% 60%;   /* Red for negative/urgent data */
+    --chart-3: 217 91% 60%; /* Blue for neutral data */
+    --chart-4: 262 83% 58%; /* Purple for additional data */
+    --chart-5: 32 95% 44%;  /* Orange for pending data */
   }
 }
 
