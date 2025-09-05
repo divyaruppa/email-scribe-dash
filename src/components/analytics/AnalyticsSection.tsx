@@ -8,9 +8,10 @@ import { AnalyticsData } from '@/types/email';
 
 interface AnalyticsSectionProps {
   data: AnalyticsData;
+  showCharts?: boolean;
 }
 
-export function AnalyticsSection({ data }: AnalyticsSectionProps) {
+export function AnalyticsSection({ data, showCharts = false }: AnalyticsSectionProps) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold text-foreground">
@@ -58,16 +59,20 @@ export function AnalyticsSection({ data }: AnalyticsSectionProps) {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <SentimentChart data={data.sentimentDistribution} />
-        <PriorityPieChart urgentEmails={data.urgentEmails} totalEmails={data.totalEmails} />
-      </div>
+      {showCharts && (
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SentimentChart data={data.sentimentDistribution} />
+            <PriorityPieChart urgentEmails={data.urgentEmails} totalEmails={data.totalEmails} />
+          </div>
 
-      {/* Additional Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <EmailsTrendChart data={data.last24Hours} />
-        <ResolutionChart />
-      </div>
+          {/* Additional Charts */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <EmailsTrendChart data={data.last24Hours} />
+            <ResolutionChart />
+          </div>
+        </>
+      )}
     </div>
   );
 }

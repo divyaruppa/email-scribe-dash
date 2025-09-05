@@ -15,6 +15,7 @@ const Index = () => {
   const [priorityFilter, setPriorityFilter] = useState<FilterType>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [emails, setEmails] = useState<Email[]>([]);
+  const [showCharts, setShowCharts] = useState(false);
   const [analytics, setAnalytics] = useState<AnalyticsData>({
     totalEmails: 0,
     positiveEmails: 0,
@@ -56,6 +57,7 @@ const Index = () => {
   const handleDataLoaded = (data: { emails: Email[]; analytics: AnalyticsData }) => {
     setEmails(data.emails);
     setAnalytics(data.analytics);
+    setShowCharts(true);
   };
 
   const handleEmailClick = (email: Email) => {
@@ -94,7 +96,7 @@ const Index = () => {
             <CsvUpload onDataLoaded={handleDataLoaded} />
             
             {/* Analytics Section */}
-            <AnalyticsSection data={analytics} />
+            <AnalyticsSection data={analytics} showCharts={showCharts} />
             
             {/* Search and Sort Section */}
             <SearchAndSort

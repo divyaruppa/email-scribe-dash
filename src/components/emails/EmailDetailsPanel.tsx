@@ -1,10 +1,11 @@
-import { X, Phone, Mail, Package } from 'lucide-react';
+import { X, Phone, Mail, Package, Copy, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Email } from '@/types/email';
 import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 interface EmailDetailsPanelProps {
   email: Email;
@@ -13,7 +14,12 @@ interface EmailDetailsPanelProps {
 }
 
 export function EmailDetailsPanel({ email, isOpen, onClose }: EmailDetailsPanelProps) {
+  const [extractedInfo, setExtractedInfo] = useState(email.extractedInfo);
   const [aiReply, setAiReply] = useState(email.aiReply);
+  const [replyHint, setReplyHint] = useState('');
+  const [generatedReply, setGeneratedReply] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { toast } = useToast();
 
   const getSentimentBadgeClass = (sentiment: string) => {
     switch (sentiment) {
@@ -37,6 +43,37 @@ export function EmailDetailsPanel({ email, isOpen, onClose }: EmailDetailsPanelP
       default:
         return '';
     }
+  };
+
+  const handleDeleteExtractedInfo = () => {
+    setExtractedInfo({
+      phone: undefined,
+      alternateEmail: undefined,
+      productOrderId: undefined,
+    });
+    toast({
+      description: "Extracted information cleared successfully",
+    });
+  };
+
+  const handleGenerateReply = async () => {
+    setIsGenerating(true);
+    // Simulate AI reply generation
+    setTimeout(() => {
+      const reply = `Thank you for your email regarding ${email.subject}. ${replyHint ? `Based on your hint: ${replyHint}. ` : ''}We appreciate your inquiry and will respond within 24 hours.`;
+      setGeneratedReply(reply);
+      setIsGenerating(false);
+      toast({
+        description: "AI reply generated successfully",
+      });
+    }, 2000);
+  };
+
+  const handleCopyReply = () => {
+    navigator.clipboard.writeText(generatedReply);
+    toast({
+      description: "Reply copied to clipboard",
+    });
   };
 
   if (!isOpen) return null;
@@ -99,35 +136,43 @@ export function EmailDetailsPanel({ email, isOpen, onClose }: EmailDetailsPanelP
 
             {/* Extracted Information */}
             <Card>
-              <CardHeader>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-lg">Extracted Information</CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDeleteExtractedInfo}
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
               </CardHeader>
               <CardContent className="space-y-4">
-                {email.extractedInfo.phone && (
+                {extractedInfo.phone && (
                   <div className="flex items-center gap-2">
                     <Phone className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">Phone:</span>
-                    <span className="text-foreground font-medium">{email.extractedInfo.phone}</span>
+                    <span className="text-foreground font-medium">{extractedInfo.phone}</span>
                   </div>
                 )}
 
-                {email.extractedInfo.alternateEmail && (
+                {extractedInfo.alternateEmail && (
                   <div className="flex items-center gap-2">
                     <Mail className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">Alt Email:</span>
-                    <span className="text-foreground font-medium">{email.extractedInfo.alternateEmail}</span>
+                    <span className="text-foreground font-medium">{extractedInfo.alternateEmail}</span>
                   </div>
                 )}
 
-                {email.extractedInfo.productOrderId && (
+                {extractedInfo.productOrderId && (
                   <div className="flex items-center gap-2">
                     <Package className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">Order ID:</span>
-                    <span className="text-foreground font-medium">{email.extractedInfo.productOrderId}</span>
+                    <span className="text-foreground font-medium">{extractedInfo.productOrderId}</span>
                   </div>
                 )}
 
-                {!email.extractedInfo.phone && !email.extractedInfo.alternateEmail && !email.extractedInfo.productOrderId && (
+                {!extractedInfo.phone && !extractedInfo.alternateEmail && !extractedInfo.productOrderId && (
                   <p className="text-muted-foreground italic">No additional information extracted</p>
                 )}
               </CardContent>
@@ -139,21 +184,44 @@ export function EmailDetailsPanel({ email, isOpen, onClose }: EmailDetailsPanelP
             <CardHeader>
               <CardTitle className="text-lg">AI-Generated Reply</CardTitle>
             </CardHeader>
-            <CardContent>
-              <Textarea
-                value={aiReply}
-                onChange={(e) => setAiReply(e.target.value)}
-                className="min-h-32 resize-none bg-card border-border focus:ring-primary focus:border-primary"
-                placeholder="AI-generated reply will appear here..."
-              />
-              <div className="flex justify-end gap-2 mt-4">
-                <Button variant="outline" onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                  Send Reply
-                </Button>
+            <CardContent className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Hint (Optional)</label>
+                <Textarea
+                  value={replyHint}
+                  onChange={(e) => setReplyHint(e.target.value)}
+                  className="min-h-20 resize-none mt-1"
+                  placeholder="Add a hint to guide the AI reply generation..."
+                />
               </div>
+              
+              <Button 
+                onClick={handleGenerateReply}
+                disabled={isGenerating}
+                className="bg-green-600 hover:bg-green-700 text-white dark:bg-green-600 dark:hover:bg-green-700"
+              >
+                {isGenerating ? 'Generating...' : 'Generate Reply'}
+              </Button>
+
+              {generatedReply && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-muted-foreground">Generated Reply</label>
+                  <div className="p-3 bg-muted rounded-md text-foreground border">
+                    {generatedReply}
+                  </div>
+                  <div className="flex justify-end">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleCopyReply}
+                      className="gap-2"
+                    >
+                      <Copy className="h-4 w-4" />
+                      Copy
+                    </Button>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
