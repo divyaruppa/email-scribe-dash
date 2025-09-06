@@ -143,7 +143,7 @@ export function CsvUpload({ onDataLoaded }: CsvUploadProps) {
     setIsLoadingApi(true);
     
     try {
-      const response = await fetch("http://localhost:8000/emails");
+      const response = await fetch("http://127.0.0.1:8000/get-data");
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -202,12 +202,12 @@ export function CsvUpload({ onDataLoaded }: CsvUploadProps) {
       
       toast({
         title: "API data loaded successfully",
-        description: `Loaded ${emails.length} emails from localhost:8000`,
+        description: `Loaded ${emails.length} emails from 127.0.0.1:8000`,
       });
     } catch (error) {
       toast({
         title: "Error loading from API",
-        description: "Could not connect to localhost:8000. Make sure your server is running.",
+        description: "Could not connect to 127.0.0.1:8000. Make sure your server is running.",
         variant: "destructive",
       });
       console.error('API Error:', error);
