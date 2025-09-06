@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+aiofiles
+python-multipart
+pydantic
+requests
+python-dotenv
+email-validator
+openai
+python-dateutil
+tqdm
+numpy
+faiss-cpu
