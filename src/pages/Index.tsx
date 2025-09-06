@@ -6,8 +6,10 @@ import { SearchAndSort } from '@/components/emails/SearchAndSort';
 import { EmailList } from '@/components/emails/EmailList';
 import { EmailDetailsPanel } from '@/components/emails/EmailDetailsPanel';
 import { CsvUpload } from '@/components/csv/CsvUpload';
+import { EmailProcessor } from '@/components/admin/EmailProcessor';
 import { mockEmails, mockAnalytics } from '@/data/mockData';
 import { Email, FilterType, AnalyticsData } from '@/types/email';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const Index = () => {
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
@@ -92,25 +94,38 @@ const Index = () => {
         
         <main className="flex-1 ml-72 mt-20 p-6 min-h-screen">
           <div className="max-w-7xl mx-auto space-y-8">
-            {/* CSV Upload Section */}
-            <CsvUpload onDataLoaded={handleDataLoaded} />
-            
-            {/* Analytics Section */}
-            <AnalyticsSection data={analytics} showCharts={showCharts} />
-            
-            {/* Search and Sort Section */}
-            <SearchAndSort
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              onSortClick={handleSortClick}
-              onFilterClick={handleFilterClick}
-            />
-            
-            {/* Email List */}
-            <EmailList
-              emails={filteredEmails}
-              onEmailClick={handleEmailClick}
-            />
+            <Tabs defaultValue="dashboard" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="dashboard">Email Dashboard</TabsTrigger>
+                <TabsTrigger value="processor">Email Processor</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="dashboard" className="space-y-8">
+                {/* CSV Upload Section */}
+                <CsvUpload onDataLoaded={handleDataLoaded} />
+                
+                {/* Analytics Section */}
+                <AnalyticsSection data={analytics} showCharts={showCharts} />
+                
+                {/* Search and Sort Section */}
+                <SearchAndSort
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  onSortClick={handleSortClick}
+                  onFilterClick={handleFilterClick}
+                />
+                
+                {/* Email List */}
+                <EmailList
+                  emails={filteredEmails}
+                  onEmailClick={handleEmailClick}
+                />
+              </TabsContent>
+              
+              <TabsContent value="processor" className="space-y-8">
+                <EmailProcessor />
+              </TabsContent>
+            </Tabs>
           </div>
         </main>
       </div>

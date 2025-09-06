@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Upload, FileText, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface CsvUploadProps {
   onDataLoaded: (data: any) => void;
@@ -143,74 +144,45 @@ export function CsvUpload({ onDataLoaded }: CsvUploadProps) {
     setIsLoadingApi(true);
     
     try {
-      const response = await fetch("http://127.0.0.1:8000/get-data");
+      // Use Supabase edge function instead of external API
+      const { data, error } = await supabase.functions.invoke('get-dashboard-data');
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (error) {
+        throw new Error(`Supabase function error: ${error.message}`);
       }
       
-      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to fetch data');
+      }
       
-      // Transform API data to match expected format
-      const emails = data.map((email: any, index: number) => ({
-        id: email.id || `api-${index + 1}`,
-        sender: email.sender || email.from || 'Unknown sender',
-        subject: email.subject || 'No subject',
-        body: email.body || email.content || 'No content',
-        dateTime: email.sent_date || email.dateTime || new Date().toLocaleString(),
-        priority: email.priority === 'urgent' ? 'urgent' : 'not urgent',
-        sentiment: ['positive', 'negative', 'neutral'].includes(email.sentiment?.toLowerCase()) 
-          ? email.sentiment.toLowerCase() 
-          : 'neutral',
-        extractedInfo: {},
-        aiReply: '',
-        isRead: false,
-      }));
-
-      // Generate analytics from API data
-      const totalEmails = emails.length;
-      const positiveEmails = emails.filter((e: any) => e.sentiment === 'positive').length;
-      const negativeEmails = emails.filter((e: any) => e.sentiment === 'negative').length;
-      const neutralEmails = emails.filter((e: any) => e.sentiment === 'neutral').length;
-      const urgentEmails = emails.filter((e: any) => e.priority === 'urgent').length;
-
-      const analytics = {
-        totalEmails,
-        positiveEmails,
-        negativeEmails,
-        neutralEmails,
-        urgentEmails,
-        averageResponseTime: '2.1 hours',
-        sentimentDistribution: {
-          positive: positiveEmails,
-          negative: negativeEmails,
-          neutral: neutralEmails,
-        },
-        last24Hours: [
-          { hour: '00:00', count: Math.floor(totalEmails * 0.05) },
-          { hour: '03:00', count: Math.floor(totalEmails * 0.03) },
-          { hour: '06:00', count: Math.floor(totalEmails * 0.08) },
-          { hour: '09:00', count: Math.floor(totalEmails * 0.15) },
-          { hour: '12:00', count: Math.floor(totalEmails * 0.20) },
-          { hour: '15:00', count: Math.floor(totalEmails * 0.18) },
-          { hour: '18:00', count: Math.floor(totalEmails * 0.12) },
-          { hour: '21:00', count: Math.floor(totalEmails * 0.08) },
-        ],
-      };
-
-      onDataLoaded({ emails, analytics });
+      console.log('Dashboard data:', data);
+      
+      // Call the data loaded handler with the fetched data
+      onDataLoaded({ 
+        emails: data.emails || [], 
+        analytics: data.analytics || {
+          totalEmails: 0,
+          positiveEmails: 0,
+          negativeEmails: 0,
+          neutralEmails: 0,
+          urgentEmails: 0,
+          averageResponseTime: "No data",
+          sentimentDistribution: { positive: 0, negative: 0, neutral: 0 },
+          last24Hours: []
+        }
+      });
       
       toast({
-        title: "API data loaded successfully",
-        description: `Loaded ${emails.length} emails from 127.0.0.1:8000`,
+        title: "Data loaded successfully",
+        description: `Loaded ${data.emails?.length || 0} emails from database`,
       });
     } catch (error) {
       toast({
-        title: "Error loading from API",
-        description: "Could not connect to 127.0.0.1:8000. Make sure your server is running.",
+        title: "Error loading data",
+        description: error instanceof Error ? error.message : "Failed to load data from backend",
         variant: "destructive",
       });
-      console.error('API Error:', error);
+      console.error('Backend Error:', error);
     } finally {
       setIsLoadingApi(false);
     }
@@ -285,7 +257,7 @@ export function CsvUpload({ onDataLoaded }: CsvUploadProps) {
                 className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
               >
                 <FileText className="h-4 w-4 mr-2" />
-                {isLoadingApi ? 'Loading...' : 'Load from API'}
+                {isLoadingApi ? 'Loading...' : 'Load from Database'}
               </Button>
             </div>
           </div>

@@ -1,1 +1,19 @@
 project_id = "chbfedqbvhgdqrnhjily"
+
+[functions.get-emails]
+verify_jwt = false
+
+[functions.process-emails]
+verify_jwt = false
+
+[functions.fetch-emails]
+verify_jwt = false
+
+[functions.get-analytics]
+verify_jwt = false
+
+[functions.get-dashboard-data]
+verify_jwt = false
+
+[functions.populate-sample-data]
+verify_jwt = false
