@@ -11,6 +11,7 @@ interface CsvUploadProps {
 export function CsvUpload({ onDataLoaded }: CsvUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isLoadingApi, setIsLoadingApi] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -138,6 +139,83 @@ export function CsvUpload({ onDataLoaded }: CsvUploadProps) {
     }
   };
 
+  const handleApiLoad = async () => {
+    setIsLoadingApi(true);
+    
+    try {
+      const response = await fetch("http://localhost:8000/emails");
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // Transform API data to match expected format
+      const emails = data.map((email: any, index: number) => ({
+        id: email.id || `api-${index + 1}`,
+        sender: email.sender || email.from || 'Unknown sender',
+        subject: email.subject || 'No subject',
+        body: email.body || email.content || 'No content',
+        dateTime: email.sent_date || email.dateTime || new Date().toLocaleString(),
+        priority: email.priority === 'urgent' ? 'urgent' : 'not urgent',
+        sentiment: ['positive', 'negative', 'neutral'].includes(email.sentiment?.toLowerCase()) 
+          ? email.sentiment.toLowerCase() 
+          : 'neutral',
+        extractedInfo: {},
+        aiReply: '',
+        isRead: false,
+      }));
+
+      // Generate analytics from API data
+      const totalEmails = emails.length;
+      const positiveEmails = emails.filter((e: any) => e.sentiment === 'positive').length;
+      const negativeEmails = emails.filter((e: any) => e.sentiment === 'negative').length;
+      const neutralEmails = emails.filter((e: any) => e.sentiment === 'neutral').length;
+      const urgentEmails = emails.filter((e: any) => e.priority === 'urgent').length;
+
+      const analytics = {
+        totalEmails,
+        positiveEmails,
+        negativeEmails,
+        neutralEmails,
+        urgentEmails,
+        averageResponseTime: '2.1 hours',
+        sentimentDistribution: {
+          positive: positiveEmails,
+          negative: negativeEmails,
+          neutral: neutralEmails,
+        },
+        last24Hours: [
+          { hour: '00:00', count: Math.floor(totalEmails * 0.05) },
+          { hour: '03:00', count: Math.floor(totalEmails * 0.03) },
+          { hour: '06:00', count: Math.floor(totalEmails * 0.08) },
+          { hour: '09:00', count: Math.floor(totalEmails * 0.15) },
+          { hour: '12:00', count: Math.floor(totalEmails * 0.20) },
+          { hour: '15:00', count: Math.floor(totalEmails * 0.18) },
+          { hour: '18:00', count: Math.floor(totalEmails * 0.12) },
+          { hour: '21:00', count: Math.floor(totalEmails * 0.08) },
+        ],
+      };
+
+      onDataLoaded({ emails, analytics });
+      
+      toast({
+        title: "API data loaded successfully",
+        description: `Loaded ${emails.length} emails from localhost:8000`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error loading from API",
+        description: "Could not connect to localhost:8000. Make sure your server is running.",
+        variant: "destructive",
+      });
+      console.error('API Error:', error);
+    } finally {
+      setIsLoadingApi(false);
+    }
+  };
+
   return (
     <Card className="bg-card shadow-card hover:shadow-hover transition-smooth border-2 border-dashed border-border">
       <CardHeader>
@@ -188,13 +266,28 @@ export function CsvUpload({ onDataLoaded }: CsvUploadProps) {
               )}
             </div>
             
-            <Button
-              disabled={isProcessing}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
-              <Upload className="h-4 w-4 mr-2" />
-              {isProcessing ? 'Processing...' : 'Select CSV File'}
-            </Button>
+            <div className="flex gap-3 justify-center">
+              <Button
+                disabled={isProcessing || isLoadingApi}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                {isProcessing ? 'Processing...' : 'Select CSV File'}
+              </Button>
+              
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleApiLoad();
+                }}
+                disabled={isProcessing || isLoadingApi}
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              >
+                <FileText className="h-4 w-4 mr-2" />
+                {isLoadingApi ? 'Loading...' : 'Load from API'}
+              </Button>
+            </div>
           </div>
         </div>
         
