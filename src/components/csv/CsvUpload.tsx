@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Upload, FileText, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 interface CsvUploadProps {
   onDataLoaded: (data: any) => void;
@@ -12,7 +11,6 @@ interface CsvUploadProps {
 export function CsvUpload({ onDataLoaded }: CsvUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isLoadingApi, setIsLoadingApi] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -140,54 +138,6 @@ export function CsvUpload({ onDataLoaded }: CsvUploadProps) {
     }
   };
 
-  const handleApiLoad = async () => {
-    setIsLoadingApi(true);
-    
-    try {
-      // Use Supabase edge function instead of external API
-      const { data, error } = await supabase.functions.invoke('get-dashboard-data');
-      
-      if (error) {
-        throw new Error(`Supabase function error: ${error.message}`);
-      }
-      
-      if (!data.success) {
-        throw new Error(data.error || 'Failed to fetch data');
-      }
-      
-      console.log('Dashboard data:', data);
-      
-      // Call the data loaded handler with the fetched data
-      onDataLoaded({ 
-        emails: data.emails || [], 
-        analytics: data.analytics || {
-          totalEmails: 0,
-          positiveEmails: 0,
-          negativeEmails: 0,
-          neutralEmails: 0,
-          urgentEmails: 0,
-          averageResponseTime: "No data",
-          sentimentDistribution: { positive: 0, negative: 0, neutral: 0 },
-          last24Hours: []
-        }
-      });
-      
-      toast({
-        title: "Data loaded successfully",
-        description: `Loaded ${data.emails?.length || 0} emails from database`,
-      });
-    } catch (error) {
-      toast({
-        title: "Error loading data",
-        description: error instanceof Error ? error.message : "Failed to load data from backend",
-        variant: "destructive",
-      });
-      console.error('Backend Error:', error);
-    } finally {
-      setIsLoadingApi(false);
-    }
-  };
-
   return (
     <Card className="bg-card shadow-card hover:shadow-hover transition-smooth border-2 border-dashed border-border">
       <CardHeader>
@@ -238,28 +188,13 @@ export function CsvUpload({ onDataLoaded }: CsvUploadProps) {
               )}
             </div>
             
-            <div className="flex gap-3 justify-center">
-              <Button
-                disabled={isProcessing || isLoadingApi}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground"
-              >
-                <Upload className="h-4 w-4 mr-2" />
-                {isProcessing ? 'Processing...' : 'Select CSV File'}
-              </Button>
-              
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleApiLoad();
-                }}
-                disabled={isProcessing || isLoadingApi}
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-              >
-                <FileText className="h-4 w-4 mr-2" />
-                {isLoadingApi ? 'Loading...' : 'Load from Database'}
-              </Button>
-            </div>
+            <Button
+              disabled={isProcessing}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              <Upload className="h-4 w-4 mr-2" />
+              {isProcessing ? 'Processing...' : 'Select CSV File'}
+            </Button>
           </div>
         </div>
         
