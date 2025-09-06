@@ -14,7 +14,199 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ai_responses: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          email_id: string
+          id: string
+          is_sent: boolean | null
+          response_text: string
+          updated_at: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          email_id: string
+          id?: string
+          is_sent?: boolean | null
+          response_text: string
+          updated_at?: string
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          email_id?: string
+          id?: string
+          is_sent?: boolean | null
+          response_text?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_responses_email_id_fkey"
+            columns: ["email_id"]
+            isOneToOne: false
+            referencedRelation: "emails"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_analytics: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          negative_emails: number | null
+          neutral_emails: number | null
+          pending_emails: number | null
+          positive_emails: number | null
+          resolved_emails: number | null
+          total_emails: number | null
+          urgent_emails: number | null
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          id?: string
+          negative_emails?: number | null
+          neutral_emails?: number | null
+          pending_emails?: number | null
+          positive_emails?: number | null
+          resolved_emails?: number | null
+          total_emails?: number | null
+          urgent_emails?: number | null
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          negative_emails?: number | null
+          neutral_emails?: number | null
+          pending_emails?: number | null
+          positive_emails?: number | null
+          resolved_emails?: number | null
+          total_emails?: number | null
+          urgent_emails?: number | null
+        }
+        Relationships: []
+      }
+      email_extractions: {
+        Row: {
+          alternate_email: string | null
+          created_at: string
+          customer_requirements: string | null
+          email_id: string
+          id: string
+          metadata: Json | null
+          phone_number: string | null
+          product_order_id: string | null
+          sentiment_indicators: Json | null
+        }
+        Insert: {
+          alternate_email?: string | null
+          created_at?: string
+          customer_requirements?: string | null
+          email_id: string
+          id?: string
+          metadata?: Json | null
+          phone_number?: string | null
+          product_order_id?: string | null
+          sentiment_indicators?: Json | null
+        }
+        Update: {
+          alternate_email?: string | null
+          created_at?: string
+          customer_requirements?: string | null
+          email_id?: string
+          id?: string
+          metadata?: Json | null
+          phone_number?: string | null
+          product_order_id?: string | null
+          sentiment_indicators?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_extractions_email_id_fkey"
+            columns: ["email_id"]
+            isOneToOne: false
+            referencedRelation: "emails"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      emails: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          is_processed: boolean | null
+          is_replied: boolean | null
+          message_id: string
+          priority: string
+          received_at: string
+          sender_email: string
+          sender_name: string | null
+          sentiment: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          is_processed?: boolean | null
+          is_replied?: boolean | null
+          message_id: string
+          priority?: string
+          received_at: string
+          sender_email: string
+          sender_name?: string | null
+          sentiment?: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          is_processed?: boolean | null
+          is_replied?: boolean | null
+          message_id?: string
+          priority?: string
+          received_at?: string
+          sender_email?: string
+          sender_name?: string | null
+          sentiment?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      Emails: {
+        Row: {
+          body: string | null
+          id: number
+          sender: string | null
+          sent_date: string | null
+          subject: string | null
+        }
+        Insert: {
+          body?: string | null
+          id: number
+          sender?: string | null
+          sent_date?: string | null
+          subject?: string | null
+        }
+        Update: {
+          body?: string | null
+          id?: number
+          sender?: string | null
+          sent_date?: string | null
+          subject?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
