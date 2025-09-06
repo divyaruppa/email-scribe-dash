@@ -1,7 +1,8 @@
 # AI Email Management Backend
 
 This is the backend for the AI-powered Email Management Dashboard (Lovable frontend).
-
+link to view the page
+https://preview--email-scribe-dash.lovable.app/
 ## Setup
 
 1. Open VS Code → **File → Open Folder** → select project folder
@@ -28,3 +29,4 @@ This is the backend for the AI-powered Email Management Dashboard (Lovable front
    const EMAILS_API = "https://abcd1234.ngrok.io/emails";
    const ANALYTICS_API = "https://abcd1234.ngrok.io/analytics";
 4. Redeploy frontend
+
